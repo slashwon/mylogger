@@ -17,7 +17,7 @@ public class LogText {
         int HIGH = 300;
     }
 
-    private final String mTag;
+    private String mTag;
 
     protected static final String HEADER = "***************************** START *****************************";
 
@@ -35,6 +35,7 @@ public class LogText {
      * 获取log标签，默认值为MyLogger
      */
     private String getFinalTag() {
+        mTag = Global.logTag;
         return (TextUtils.isEmpty(mTag)) ? "MyLogger" : mTag;
     }
 

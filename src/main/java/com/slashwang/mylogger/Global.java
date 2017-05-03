@@ -14,6 +14,7 @@ public class Global {
     public static boolean isDebug = true;
 
     public static boolean isWrite = true;
+    public static boolean canWrite = false;
 
     public static void initGlobal(boolean debug, String tag, boolean write, String logFileName) {
         Global.logFileName = logFileName;

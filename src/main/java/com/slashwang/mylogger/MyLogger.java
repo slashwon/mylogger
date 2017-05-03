@@ -12,6 +12,11 @@ public class MyLogger {
     private static Writable sWritable;
     private static boolean isInit = false;
 
+    /**Set tag of each MyLogger.*/
+    public static void setTag(String tag) {
+        Global.logTag = tag;
+    }
+
     /**@see {@code init()} */
     public static void init(boolean debug, String logFileName) {
         init(debug, null, true, logFileName);
@@ -38,7 +43,7 @@ public class MyLogger {
      * Log the common messages from your code.
      * @param content what you want to show.
      * @param level log level with type of integer.
-     *              @see {@link com.slashwang.mylogger.LogText.Level}
+     *              @see {@link LogText.Level}
      * @exception Exception if you use these methods below before the class has been inited,
      *          this method would throw a soft exception to remind you that .
      * */
@@ -46,12 +51,17 @@ public class MyLogger {
         try {
             sLogText = (sLogText == null) ? new LogText() : sLogText;
             String msg = sLogText.log(content, level);
-            if (Global.isWrite) {
+            if (Global.isWrite
+                    && Global.canWrite) {
                 sWritable.write2File(msg);
             }
         } catch (Exception e) {
             Log.e(Global.logTag, "MyLogger尚未初始化!");
         }
+    }
+
+    public static void log(String content) {
+        log(content, LogText.Level.MID);
     }
 
     /**
@@ -64,7 +74,8 @@ public class MyLogger {
     public static void t(Throwable t) {
         sLogT = (sLogT == null) ? new LogThrowable() : sLogT;
         String msg = sLogT.show(t);
-        if (Global.isWrite) {
+        if (Global.isWrite
+                && Global.canWrite) {
             sWritable.write2File(msg);
         }
     }
@@ -73,5 +84,9 @@ public class MyLogger {
     static void logSelf(String content) {
         sLogText = (sLogText == null) ? new LogText() : sLogText;
         sLogText.log(content, LogText.Level.LOW);
+    }
+
+    public static void canWrite(boolean b) {
+        Global.canWrite = b;
     }
 }
